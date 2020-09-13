@@ -12,7 +12,6 @@
         var calendarData = [];  //localStorage.getItem(date);
         
         for (var h = 0; h <= 17; h++) {
-        
         calendarData.push(localStorage.getItem(h));        
         }
         return calendarData;
@@ -32,7 +31,7 @@
       console.log('currentSimpleDate: ', currentSimpleDate);
      //- Create ViewModel
       var calendarViewModel = {
-        currentDate: moment().format('MMMM Do YYYY, h:mm:ss a'),
+        currentDate: moment().format('MMMM Do YYYY, h:mm A'),
         calendarData: dataService.loadCalendarItem(currentSimpleDate)
       }
   
