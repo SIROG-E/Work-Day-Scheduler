@@ -43,9 +43,9 @@
         var textId = `text${hour}`
         var hourlyTemplate = `
         <div class="row hour-block ${hourDecorator}">
-          <div class="col-1 hour">${moment(d).format('h A')}
+          <div class="col-md-1 hour d-flex align-items-center">${moment(d).format('h A')}
           </div>
-            <textarea id="${textId}" class="col-10 d-flex description">${details}</textarea>
+            <textarea id="${textId}" class="col-md-10 description">${details}</textarea>
                 <button id="${buttonId}" type="button" class="saveBtn col-1 fa fa-save fa-2x"></button>
         </div>`;
         return hourlyTemplate;
