@@ -1,33 +1,110 @@
-// A $( document ).ready() block.
-$(document).ready(function () {
-  console.log("ready!");
-});
 
-// add global variables
-var availHours = []; // declares an array
-var schedHours = {}; // declares an object
-var moment = moment();
-var currTime = moment.hour();
-var nuDay = moment().hour(0);
-// declares an object
- 
-// add clock to current Day id (use moments.js)
-//        to display current day at top of calendar.
+//1. 	Load page
+(function($) {
+    "use strict";
+  
+    localStorage.setItem("", "");
+  //- Load calendar data
+    $(document).ready(function() {
+      //date format MMDDYYYY
+      var loadFunction = function(date) {
+        //'09/12/2020'
+        var calendarData = [];  //localStorage.getItem(date);
+        
+        for (var h = 0; h <= 17; h++) {
+        
+        calendarData.push(localStorage.getItem(h));        
+        }
+        return calendarData;
+      }
+  
+      var saveFunction = function(hour, hourInfo) {
+        localStorage.setItem(hour, hourInfo);
+      }
+  
+      var dataService = {
+        loadCalendarItem: loadFunction,
+        saveCalendarItem: saveFunction
+      }
+  
+      //- Load current date time
+      var currentSimpleDate = moment().format('L');
+      console.log('currentSimpleDate: ', currentSimpleDate);
+     //- Create ViewModel
+      var calendarViewModel = {
+        currentDate: moment().format('MMMM Do YYYY, h:mm:ss a'),
+        calendarData: dataService.loadCalendarItem(currentSimpleDate)
+      }
+  
+      console.log('calendarViewModel: ', calendarViewModel);
+  
+      function htmlTemplate(hour, details, hourDecorator) {
+        var d = new Date().setHours(hour);
+        var buttonId = `hrBtn${hour}`;
+        var textId = `text${hour}`
+        var hourlyTemplate = `
+        <div class="row hour-block ${hourDecorator}">
+          <div class="col-1 hour">${moment(d).format('h A')}
+          </div>
+            <textarea id="${textId}" class="col-10 d-flex description">${details}</textarea>
+                <button id="${buttonId}" type="button" class="saveBtn col-1 fa fa-save fa-2x"></button>
+        </div>`;
+        return hourlyTemplate;
+      }
+  
+       var dailyInfo = [];
+      function printCalendar() {
+        var hourDecorator;
+        //- Color code hour depending on past, present, future
 
-// Present timeblocks for standard business hours 9am-5pm
-// generate textareas for scheduling
+        for (var h = 9; h <= 17; h++) {
+          //if (expression) ? true : false
+          var hourData = (calendarViewModel.calendarData === null) ? null : calendarViewModel.calendarData[h];
+          //console.log(moment().hour());
+  
+          if (moment().hour() > h) {
+            //create past css class 
+            hourDecorator = 'past';
+          } else if (moment().hour() === h) {
+            hourDecorator = 'present';
+          } else if (moment().hour() < h) {
+            hourDecorator = 'future';
+          }
+  
+          var html = htmlTemplate(h, (hourData == null ? "" : hourData), hourDecorator);
+          $(".container").append(html);
+        }
+      }
+    //- Print hourly calendar
+      printCalendar();
+  
+      function handleHourSaveEvent() {
+      }
+  
+      $("#currentDay").html(calendarViewModel.currentDate);
+  
+      $(".saveBtn").click(function(index, element) {
+        console.log('I was clicked!');
+        //save calendar time slot
+        var hour = this.id.replace('hrBtn', '');      
+        hour= parseInt(hour, 10);
+  
+        var detailsId = `#text${hour}`;
+        console.log('dets: ', detailsId);
+        
+        var details = $(`#text${hour}`).val(); //text1, text2
+        console.log('dets: ', details);
+        
+        var hourlyInfo = {
+          hour: hour,
+          details: details
+        }
 
-// Color code each timeblock to determine past, present or future.
+        console.log('dailyInfo bef', dailyInfo);
+        console.log('dailyInfo after', dailyInfo);
+  
+        dataService.saveCalendarItem(hour, details);
+      });
+    });
 
-// add save button fot timeblock to store after entering event
-
-// save event to local (JSON.parse) storage so that when page is refreshed it stays there
-// use session storage to take input from user then save it to local storage
-// so when user refreshes page, it pulls data from local storage and inserts it to session storage to populate page.
-
-
-//set value of available Hours to equal the user input for each row
-//save value to local storage on click
-//set available Hours time attribute
-//set available Hours value attribute
-//save user input in each object to local storage
+  })(window.jQuery);
