@@ -5,7 +5,7 @@
 This **project** was assembled to create a **simple calendar application** that allows the user to save events for each hour of the day. This app runs in the browser and features dynamically updated HTML and CSS powered by jQuery. The [Moment.js](https://momentjs.com/) library was used to show current date and time.
 
 ## Preview
-![Work Day Scheduler](./Work-Day-Scheduler-Preview.gif)
+![Work Day Scheduler](./assets/Work-Day-Scheduler-Preview.gif)
 
 ### Website
 
